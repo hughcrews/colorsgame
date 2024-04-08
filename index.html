@@ -137,6 +137,7 @@
     let timerStarted = false;
     let musicOn = false;
     const songs = ["library.mp3", "coffee.mp3", "plains.mp3"];
+    manualPause = false;
     
     // Get the audio element
     const backgroundMusic = document.getElementById("backgroundMusic");
@@ -161,6 +162,11 @@
     // Play the next song
     backgroundMusic.play();
   });
+
+  backgroundMusic.addEventListener('pause', function() {
+    // Code to handle manual pause
+    manualPause = true;
+});
 
     // Function to generate a random color
     function generateRandomColor() {
@@ -618,7 +624,7 @@ function updateTimerDisplay(timeleft) {
 // Function to start the game
 function startGame() {
 // Autoplay music on start
-if(backgroundMusic.paused) {
+if(backgroundMusic.paused && manualPause === false) {
   backgroundMusic.play();
 }
 
