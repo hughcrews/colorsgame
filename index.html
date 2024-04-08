@@ -116,8 +116,13 @@
   <div id="buttons">
     <button id="refreshButton">Start New Game</button>
     <button class="extra_buttons" id="invertButton">Invert All</button>
-    <!-- <label><input type="checkbox" id="cellInversionCheckbox" checked> Single Cell Inversion</label> -->
   </div>
+
+  <!-- <audio id="backgroundMusic" src="plains.mp3" loop></audio> -->
+  <audio id="backgroundMusic" controls>
+    <source src="library.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
   <script>
     // Set up global vars
@@ -130,6 +135,32 @@
     let points = 0;
     let timerInterval;
     let timerStarted = false;
+    let musicOn = false;
+    const songs = ["library.mp3", "coffee.mp3", "plains.mp3"];
+    
+    // Get the audio element
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    let currentSong = 1;
+
+    // Set the volume to 50% (0.5)
+    backgroundMusic.volume = 0.35;
+
+    // Add event listener to detect when the song ends
+    backgroundMusic.addEventListener('ended', function() {
+
+    // Switch between songs
+    if (currentSong === songs.length) {
+      currentSong = 1;
+    } 
+    else {
+      currentSong = currentSong + 1;
+    }
+
+    backgroundMusic.src = songs[currentSong-1]
+    
+    // Play the next song
+    backgroundMusic.play();
+  });
 
     // Function to generate a random color
     function generateRandomColor() {
@@ -180,6 +211,7 @@
 
     // Function to restart game
     function restartGame() {
+
       // Add event listener to refresh button and r keys
       document.getElementById("refreshButton").addEventListener("click", startGame); 
       document.addEventListener("keydown", handleKeyDownIdle);
@@ -585,6 +617,11 @@ function updateTimerDisplay(timeleft) {
 
 // Function to start the game
 function startGame() {
+// Autoplay music on start
+if(backgroundMusic.paused) {
+  backgroundMusic.play();
+}
+
   clears = 0;
   points = 0;
   for (let i = 0; i < gridSize; i++) {
