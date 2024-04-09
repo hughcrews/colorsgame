@@ -342,6 +342,8 @@
       clearTimeout(singleTapTimer);
       isDoubleTap = true;
 
+      event.preventDefault();
+
       // Making note of this in case I want to use later:
       // document.getElementById("cellInversionCheckbox").checked &&
       if (event.target.dataset.row !== undefined) {
@@ -464,14 +466,19 @@ function handleCellMouseDown(event) {
 
   // Add event listener to the document to listen for mouse move events
   document.addEventListener("mousemove", handleCellMouseMove);
-  document.addEventListener("touchmove", handleCellTouchMove);
+  document.addEventListener("touchmove", handleCellTouchMove, { passive: false });
 
 }
 
 // Function to handle mouse down event on a cell
 function handleCellTouchStart(event) {
+
+  if (event.touches.length > 1) {
+        event.preventDefault();
+    }
     
     if (!isDoubleTap) {
+        
         // Start the timer for a single click
         singleTapTimer = setTimeout(function() {
             // Perform action for single click here
@@ -498,7 +505,7 @@ function handleCellTouchStart(event) {
 
   // Add event listener to the document to listen for mouse move events
   document.addEventListener("mousemove", handleCellMouseMove);
-  document.addEventListener("touchmove", handleCellTouchMove);
+  document.addEventListener("touchmove", handleCellTouchMove, { passive: false });
 
 }
 
@@ -543,6 +550,9 @@ function handleCellMouseMove(event) {
 
 // Function to handle mouse move event on the document
 function handleCellTouchMove(event) {
+
+  event.preventDefault();
+
   if (event.touches.length > 0 && startCell !== null) {
         let touchX = event.touches[0].clientX;
         let touchY = event.touches[0].clientY;
@@ -813,10 +823,10 @@ function updateTimerDisplay(timeleft) {
 
 // Function to start the game
 function startGame() {
-// Autoplay music on start
-if(backgroundMusic.paused && manualPause === false) {
-  backgroundMusic.play();
-}
+  // Autoplay music on start
+  if(backgroundMusic.paused && manualPause === false) {
+    backgroundMusic.play();
+  }
 
   clears = 0;
   points = 0;
@@ -831,7 +841,7 @@ if(backgroundMusic.paused && manualPause === false) {
 
   // Add event listener to the board to listen for mouse down events on cells
   document.getElementById("board").addEventListener("mousedown", handleCellMouseDown);
-  document.getElementById("board").addEventListener("touchstart", handleCellTouchStart);
+  document.getElementById("board").addEventListener("touchstart", handleCellTouchStart, { passive: false });
   document.getElementById("invertButton").addEventListener("click", invertColors); // Add event listener to invert colors button
 
   // Add event listener to the document to listen for keydown events
