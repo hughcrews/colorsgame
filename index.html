@@ -131,6 +131,8 @@
     let endCell = null; // Initialize startCell variable
     let singleClickTimer;
     let isDoubleClick = false;
+    let singleTapTimer;
+    let isDoubleTap = false;
     let clears = 0;
     let points = 0;
     let timerInterval;
@@ -314,6 +316,56 @@
       }
     }
 
+    function handleDoubleTap(event) {
+
+      // Cancel the timer if a double click occurs
+      clearTimeout(singleTapTimer);
+      isDoubleTap = true;
+
+      // Making note of this in case I want to use later:
+      // document.getElementById("cellInversionCheckbox").checked &&
+      if (event.target.dataset.row !== undefined) {
+      let row = event.target.dataset.row;
+      let col = event.target.dataset.col;
+
+      // Invert the color of the clicked cell
+      switch(board[row][col]) {
+        /* case "black":
+          board[row][col] = "white";
+          break; */
+        case "white":
+          board[row][col] = "black";
+          break;
+        case "red":
+          board[row][col] = "green";
+          break;
+        case "blue":
+          board[row][col] = "orange";
+          break;
+        case "yellow":
+          board[row][col] = "purple";
+          break;
+        case "green":
+          board[row][col] = "red";
+          break;
+        case "purple":
+          board[row][col] = "yellow";
+          break;
+        case "orange":
+          board[row][col] = "blue";
+          break;
+        default:
+          // Do nothing for colors not specified in the rules
+          break;
+      }
+      renderBoard(); // Render the updated board
+      // Call clearRowsAndColumns to check for clears after rendering the board
+      clearRowsAndColumns(board);
+      } else {
+        return
+      }
+    }
+
     // Function to handle keys during games
     function handleKeyDownPlay(event) {
       if (event.key === "Enter") {
@@ -388,9 +440,45 @@ function handleCellMouseDown(event) {
 
   // Add event listener to the document to listen for mouse up events
   document.addEventListener("mouseup", handleCellMouseUp);
+  document.addEventListener("touchend", handleCellTouchEnd);
 
   // Add event listener to the document to listen for mouse move events
   document.addEventListener("mousemove", handleCellMouseMove);
+  document.addEventListener("touchmove", handleCellTouchMove);
+
+}
+
+// Function to handle mouse down event on a cell
+function handleCellTouchStart(event) {
+    
+    if (!isDoubleTap) {
+        // Start the timer for a single click
+        singleTapTimer = setTimeout(function() {
+            // Perform action for single click here
+        }, 200); // Adjust the time according to your needs
+    }
+
+  // Store the row and column indices of the cell where the mouse down event occurred
+  event.target.dataset.startRow = event.target.dataset.row;
+  event.target.dataset.startCol = event.target.dataset.col;
+
+  // Retrieve the row and column indices of the cell where the mouse down event occurred
+  let startRow = parseInt(event.target.dataset.row);
+  let startCol = parseInt(event.target.dataset.col);
+
+  // Store the start cell in the startCell object
+  startCell = {
+    row: startRow,
+    col: startCol
+  };
+
+  // Add event listener to the document to listen for mouse up events
+  document.addEventListener("mouseup", handleCellMouseUp);
+  document.addEventListener("touchend", handleCellTouchEnd);
+
+  // Add event listener to the document to listen for mouse move events
+  document.addEventListener("mousemove", handleCellMouseMove);
+  document.addEventListener("touchmove", handleCellTouchMove);
 
 }
 
@@ -432,18 +520,60 @@ function handleCellMouseMove(event) {
     }
 }
 
+
+// Function to handle mouse move event on the document
+function handleCellTouchMove(event) {
+  if (event.touches.length > 0 && startCell !== null) {
+        let touchX = event.touches[0].clientX;
+        let touchY = event.touches[0].clientY;
+      // Check if a starting cell has been selected
+      if (!isNaN(touchX) && !isNaN(touchY) && isFinite(touchX) && isFinite(touchY)) {
+            let endCell_tile = document.elementFromPoint(touchX, touchY);
+
+      if (endCell_tile && endCell_tile.classList.contains("tile")) {
+        // If the cursor is over a cell, store its row and column index
+        endCell = {
+          row: parseInt(endCell_tile.dataset.row),
+          col: parseInt(endCell_tile.dataset.col),
+        };
+
+        // Highlight the hovered cell for feedback
+        if(startCell.row !== endCell.row || startCell.col !== endCell.col) {
+            //endCell_tile.style.border = "2px solid yellow";
+            // Check if the move is legal according to the rules
+            if (isLegalMove(startCell.row, startCell.col, endCell.row, endCell.col)) {
+                // Highlight the hovered cell to provide feedback for a legal move
+                endCell_tile.style.border = "2px solid green";
+            } else {
+                // Highlight the hovered cell to provide feedback for an illegal move
+                endCell_tile.style.border = "2px solid red";
+            }
+        }
+        
+      } 
+      else if(endCell_tile && !endCell_tile.classList.contains("tile")) {
+        // Reset border so it's no longer highlighted
+        // Iterate through all cells and reset their border styles
+        document.querySelectorAll(".tile").forEach(function(cell) {
+        cell.style.border = "1px solid black";
+        });
+      }
+    }
+  }
+}
+
 // Function to handle mouse up event on the document
 function handleCellMouseUp(event) {
     if (startCell !== null) {
         // Check if a starting cell has been selected
-        let endCell = document.elementFromPoint(event.clientX, event.clientY);
-        if (endCell && endCell.classList.contains("tile")) {
+        let endCell_tile = document.elementFromPoint(event.clientX, event.clientY);
+        if (endCell_tile && endCell_tile.classList.contains("tile")) {
 
             // If the cursor is over a cell, store its row and column index
             endCell = {
-                row: parseInt(endCell.dataset.row),
-                col: parseInt(endCell.dataset.col),
-                element: endCell // Store the actual element for border setting
+                row: parseInt(endCell_tile.dataset.row),
+                col: parseInt(endCell_tile.dataset.col),
+                element: endCell_tile // Store the actual element for border setting
             };
             // Reset the border of the hovered cell
             endCell.element.style.border = "1px solid black";
@@ -460,6 +590,42 @@ function handleCellMouseUp(event) {
         clearTimeout(singleClickTimer);
 
     }
+}
+
+// Function to handle mouse up event on the document
+function handleCellTouchEnd(event) {
+  if (event.changedTouches.length > 0 && startCell !== null) {
+        let touchX = event.changedTouches[0].clientX;
+        let touchY = event.changedTouches[0].clientY;
+      // Check if a starting cell has been selected
+      if (!isNaN(touchX) && !isNaN(touchY) && isFinite(touchX) && isFinite(touchY)) {
+        let endCell_tile = document.elementFromPoint(touchX, touchY);
+
+      if (endCell_tile && endCell_tile.classList.contains("tile")) {
+
+            // If the cursor is over a cell, store its row and column index
+            endCell = {
+                row: parseInt(endCell_tile.dataset.row),
+                col: parseInt(endCell_tile.dataset.col),
+                element: endCell_tile // Store the actual element for border setting
+            };
+
+            // Reset the border of the hovered cell
+            endCell.element.style.border = "1px solid black";
+            // Check if the move is legal and update colors if it is
+            if (isLegalMove(startCell.row, startCell.col, endCell.row, endCell.col)) {
+                updateColors(startCell.row, startCell.col, endCell.row, endCell.col);
+            }
+        }
+        // Reset the starting cell
+        startCell = null;
+        endCell= null;
+        // Reset the flag and timer on mouse up
+        isDoubleTap = false;
+        clearTimeout(singleTapTimer);
+
+    }
+  }
 }
 
 function isLegalMove(startRow, startCol, endRow, endCol) {
@@ -596,10 +762,14 @@ function startTimer() {
                 timerStarted = false; // Reset the flag when timer is done
                 // Disable event listeners for mouse actions
                 document.getElementById("board").removeEventListener("mousedown", handleCellMouseDown);
+                document.getElementById("board").removeEventListener("touchstart", handleCellTouchStart);
                 document.removeEventListener("mousemove", handleCellMouseMove);
+                document.removeEventListener("touchmove", handleCellTouchMove);
                 document.removeEventListener("mouseup", handleCellMouseUp);
+                document.removeEventListener("touchend", handleCellTouchEnd);
                 document.getElementById("invertButton").removeEventListener("click", invertColors);
                 document.getElementById("board").removeEventListener("dblclick", handleDblClick);
+                document.getElementById("board").removeEventListener("doubletap", handleDoubleTap);
                 document.removeEventListener("keydown", handleKeyDownPlay);
                 document.addEventListener("keydown", handleKeyDownIdle);
             }
@@ -641,6 +811,7 @@ if(backgroundMusic.paused && manualPause === false) {
 
   // Add event listener to the board to listen for mouse down events on cells
   document.getElementById("board").addEventListener("mousedown", handleCellMouseDown);
+  document.getElementById("board").addEventListener("touchstart", handleCellTouchStart);
   document.getElementById("invertButton").addEventListener("click", invertColors); // Add event listener to invert colors button
 
   // Add event listener to the document to listen for keydown events
@@ -648,6 +819,7 @@ if(backgroundMusic.paused && manualPause === false) {
 
   // Add event listener to the board to listen for cell click events
   document.getElementById("board").addEventListener("dblclick", handleDblClick);
+  document.getElementById("board").addEventListener("doubletap", handleDoubleTap);
 
   // Adjust layout when the page loads
   adjustLayout();
@@ -666,8 +838,20 @@ if(backgroundMusic.paused && manualPause === false) {
     });
   });
 
+  // Add event listeners to each cell to handle mouse click and drag events
+  document.querySelectorAll(".tile").forEach(function (tile) {
+    tile.addEventListener("touchstart", function (event) {
+      // Store the row and column index of the starting cell
+      startCell = {
+        row: parseInt(event.target.dataset.row),
+        col: parseInt(event.target.dataset.col),
+      };
+    });
+  });
+
   // Function to handle mouse up event on the document
   document.addEventListener("mouseup", handleCellMouseUp)
+  document.addEventListener("touchend", handleCellTouchEnd)
 
   // Start the timer 
   clearInterval(timerInterval); // Clear the previous interval
