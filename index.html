@@ -24,7 +24,7 @@
       width: 80%; /* Set the width of the statistics box to 80% of the window width */
       max-width: 720px; /* Set a maximum width for the statistics box */
       margin-top: 20px; /* Add margin between statistics box and play area */
-      background-color: #f0f0f0; /* Set background color for the statistics box */
+      background-color: lightsteelblue; /* Set background color for the statistics box */
       border: 2px solid black; /* Add border around the statistics box */
       padding: 10px; /* Add padding inside the statistics box */
       text-align: center; /* Center-align text */
@@ -140,6 +140,7 @@
     let musicOn = false;
     const songs = ["library.mp3", "coffee.mp3", "plains.mp3"];
     manualPause = false;
+    let selectedPalette = 0;
     
     // Get the audio element
     const backgroundMusic = document.getElementById("backgroundMusic");
@@ -169,6 +170,17 @@
     // Code to handle manual pause
     manualPause = true;
 });
+
+    function getPalette(colorValue, palletNum) {
+      const shades = [["red", "blue", "yellow", "orange", "purple", "green", "black"], 
+      ["#FA7070", "#61A3BA", "#FFEAA7", "#FFBB64", "#E9A8F2", "#A1C398", "#191919"]]
+      if (palletNum===0) {
+        return(colorValue)
+      } else {
+        colorSpot = shades[0].indexOf(colorValue)
+        return(shades[palletNum][colorSpot])
+      }
+    }
 
     // Function to generate a random color
     function generateRandomColor() {
@@ -204,8 +216,13 @@
           // Set the width and height of each cell based on the calculated cell size
           tile.style.width = cellSize + "px";
           tile.style.height = cellSize + "px";
-          
-          tile.style.backgroundColor = board[i][j]; // Set background color
+
+          if(board[i][j] === "white") {
+            tile.style.backgroundColor = "white"
+          }
+          else {
+            tile.style.backgroundColor = getPalette(board[i][j], selectedPalette); // Set background color
+          }
           tile.dataset.row = i; // Store row index in dataset
           tile.dataset.col = j; // Store column index in dataset
           boardContainer.appendChild(tile);
@@ -219,6 +236,9 @@
 
     // Function to restart game
     function restartGame() {
+      //For now let's start with random pallete
+      selectedPalette = Math.floor(Math.random() * 2);
+      //selectedPalette = 1;
 
       // Add event listener to refresh button and r keys
       document.getElementById("refreshButton").addEventListener("click", startGame); 
