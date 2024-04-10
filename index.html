@@ -249,7 +249,10 @@
       // Add event listener to refresh button and r keys
       document.getElementById("refreshButton").addEventListener("click", startGame); 
       document.addEventListener("keydown", handleKeyDownIdle);
-    }
+      document.addEventListener("contextmenu", function(event) {
+        event.preventDefault();
+        });
+      }
 
     // Function to invert the colors except black since white is goal
     function invertColors() {
