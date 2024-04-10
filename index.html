@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Color Inversion</title>
   <style>
     body {
@@ -23,14 +22,15 @@
       display: flex;
       flex-direction: column; /* Arrange items in a column */
       width: 80%; /* Set the width of the statistics box to 80% of the window width */
-      max-width: 720px; /* Set a maximum width for the statistics box */
+      max-width: 920px; /* Set a maximum width for the statistics box */
       margin-top: 20px; /* Add margin between statistics box and play area */
       padding: 10px; /* Add padding inside the statistics box */
       align-items: center; /* Center the items vertically */
+      touch-action: manipulation;
     }
     #stats {
       width: 80%; /* Set the width of the statistics box to 80% of the window width */
-      max-width: 720px; /* Set a maximum width for the statistics box */
+      max-width: 920px; /* Set a maximum width for the statistics box */
       margin-top: 20px; /* Add margin between statistics box and play area */
       background-color: lightsteelblue; /* Set background color for the statistics box */
       border: 2px solid black; /* Add border around the statistics box */
@@ -39,8 +39,8 @@
     }
     #playArea {
       width: 80%; /* Set the width of the grid to 80% of the window width */
-      max-width: 720px; /* Set a maximum width for the grid */
-      max-height: 720px;
+      max-width: 920px; /* Set a maximum width for the grid */
+      max-height: 920px;
       border: 2px solid black; /* Add border around the play area */
       padding: 10px; /* Add some padding inside the play area */
       margin-top: 20px; /* Add margin between the play area and the top */
@@ -78,7 +78,7 @@
     #board {
       width: 100%; /* Set the width of the grid to 90% of the window width */
       height: 60vh; /* Set the height of the grid to 60% of the viewport height */
-      max-width: 720px; /* Set a maximum width for the grid */
+      max-width: 920px; /* Set a maximum width for the grid */
       margin-top: 5vh; /* Set the top margin to 5% of the viewport height */
       margin-bottom: 5vh; /* Set the bottom margin to 5% of the viewport height */
       align-items: center; /* Center the items vertically */
@@ -88,8 +88,6 @@
       display: flex;
       box-sizing: border-box; /* Include padding and border in the element's total width and height */
       float: left;
-      width: calc(25% - 6px); /* Calculate width for 4 columns with 10px margin between them */
-      height: calc(25% - 6px); /* Calculate height for 4 rows with 10px margin between them */
       margin: 3px; /* Add margin between cells */
       border: 1px solid black; /* Add border around cells */
       cursor: pointer; /* Change cursor to pointer when hovering over cells */
@@ -134,7 +132,7 @@
 
   <script>
     // Set up global vars
-    const gridSize = 8; // 4x4 grid
+    const gridSize = 5; // 4x4 grid
     let startCell = null; // Initialize startCell variable
     let endCell = null; // Initialize startCell variable
     let singleClickTimer;
@@ -349,8 +347,6 @@
       // Cancel the timer if a double click occurs
       clearTimeout(singleTapTimer);
       isDoubleTap = true;
-
-      event.preventDefault();
 
       // Making note of this in case I want to use later:
       // document.getElementById("cellInversionCheckbox").checked &&
