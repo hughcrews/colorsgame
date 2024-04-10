@@ -26,7 +26,7 @@
       margin-top: 20px; /* Add margin between statistics box and play area */
       padding: 10px; /* Add padding inside the statistics box */
       align-items: center; /* Center the items vertically */
-      touch-action: manipulation;
+      touch-action: none;
     }
     #stats {
       width: 80%; /* Set the width of the statistics box to 80% of the window width */
@@ -36,6 +36,7 @@
       border: 2px solid black; /* Add border around the statistics box */
       padding: 10px; /* Add padding inside the statistics box */
       text-align: center; /* Center-align text */
+      touch-action: none;
     }
     #playArea {
       width: 80%; /* Set the width of the grid to 80% of the window width */
@@ -48,12 +49,14 @@
       background-image: url('spring_opaque.png'); /* Specify the path to your image */
       background-size: cover; /* Ensure the image covers the entire play area */
       background-position: center; /* Center the image within the play area */
+      touch-action: none;
     }
     /* Media query for larger width than height */
     @media only screen and (orientation: landscape) and (max-device-height: 1000px) {
       #container {
         flex-direction: row; /* Change flex direction to row */
-        align-items: flex-start
+        align-items: flex-start;
+        touch-action: none;
         
       }
       #stats {
@@ -62,10 +65,12 @@
         float: right; /* Float the stats box to the right */
         padding: 25px; /* Add some padding inside the play area */
         margin-right: 20px;
+        touch-action: none;
       }
       #playArea {
         width: 80%; /* Set the width of the grid to 80% of the window width */
         float: left; /* Float the stats box to the right */
+        touch-action: none;
       }
     }
     /* Media query for smaller width than height */
@@ -73,6 +78,7 @@
       #stats {
         width: 80%; /* Set the width of the statistics box to 80% of the window width */
         margin: 20px auto; /* Center the stats box horizontally */
+        touch-action: none;
       }
     }
     #board {
@@ -83,6 +89,7 @@
       margin-bottom: 5vh; /* Set the bottom margin to 5% of the viewport height */
       align-items: center; /* Center the items vertically */
       justify-content: center;
+      touch-action: none;
     }
     .tile {
       display: flex;
@@ -93,6 +100,7 @@
       cursor: pointer; /* Change cursor to pointer when hovering over cells */
       align-items: center; /* Center the items vertically */
       justify-content: center;
+      touch-action: none;
     }
     .tile:hover {
       box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.9); /* Darken the cell when hovered over */
@@ -101,9 +109,11 @@
     #buttons {
       margin-top: 20px; /* Add margin between grid and buttons */
       align-items: center; /* Center the items vertically */
+      touch-action: none;
     }
     #buttons .extra_buttons {
       margin-left: 50px;
+      touch-action: none;
     }
   </style>
 </head>
