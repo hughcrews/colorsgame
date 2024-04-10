@@ -351,6 +351,8 @@
       clearTimeout(singleTapTimer);
       isDoubleTap = true;
 
+      event.preventDefault();
+
       // Making note of this in case I want to use later:
       // document.getElementById("cellInversionCheckbox").checked &&
       if (event.target.dataset.row !== undefined) {
