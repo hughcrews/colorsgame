@@ -21,16 +21,16 @@
     #container {
       display: flex;
       flex-direction: column; /* Arrange items in a column */
-      width: 80%; /* Set the width of the statistics box to 80% of the window width */
-      max-width: 920px; /* Set a maximum width for the statistics box */
+      width: 90%; /* Set the width of the statistics box to 80% of the window width */
+      max-width: 800px; /* Set a maximum width for the statistics box */
       margin-top: 20px; /* Add margin between statistics box and play area */
       padding: 10px; /* Add padding inside the statistics box */
       align-items: center; /* Center the items vertically */
       touch-action: none;
     }
     #stats {
-      width: 80%; /* Set the width of the statistics box to 80% of the window width */
-      max-width: 920px; /* Set a maximum width for the statistics box */
+      width: 90%; /* Set the width of the statistics box to 80% of the window width */
+      max-width: 800px; /* Set a maximum width for the statistics box */
       margin-top: 20px; /* Add margin between statistics box and play area */
       background-color: lightsteelblue; /* Set background color for the statistics box */
       border: 2px solid black; /* Add border around the statistics box */
@@ -39,9 +39,9 @@
       touch-action: none;
     }
     #playArea {
-      width: 80%; /* Set the width of the grid to 80% of the window width */
-      max-width: 920px; /* Set a maximum width for the grid */
-      max-height: 920px;
+      width: 90%; /* Set the width of the grid to 80% of the window width */
+      max-width: 800px; /* Set a maximum width for the grid */
+      max-height: 800px;
       border: 2px solid black; /* Add border around the play area */
       padding: 10px; /* Add some padding inside the play area */
       margin-top: 20px; /* Add margin between the play area and the top */
@@ -68,7 +68,7 @@
         touch-action: none;
       }
       #playArea {
-        width: 80%; /* Set the width of the grid to 80% of the window width */
+        width: 90%; /* Set the width of the grid to 80% of the window width */
         float: left; /* Float the stats box to the right */
         touch-action: none;
       }
@@ -82,9 +82,9 @@
       }
     }
     #board {
-      width: 100%; /* Set the width of the grid to 90% of the window width */
+      width: 90%; /* Set the width of the grid to 90% of the window width */
       height: 60vh; /* Set the height of the grid to 60% of the viewport height */
-      max-width: 920px; /* Set a maximum width for the grid */
+      max-width: 720px; /* Set a maximum width for the grid */
       margin-top: 5vh; /* Set the top margin to 5% of the viewport height */
       margin-bottom: 5vh; /* Set the bottom margin to 5% of the viewport height */
       align-items: center; /* Center the items vertically */
@@ -135,14 +135,14 @@
   </div>
 
   <!-- <audio id="backgroundMusic" src="plains.mp3" loop></audio> -->
-  <audio id="backgroundMusic" controls>
+  <audio id="backgroundMusic" controls controlsList="nodownload noplaybackrate">
     <source src="library.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script>
     // Set up global vars
-    const gridSize = 5; // 4x4 grid
+    const gridSize = 8; // 4x4 grid
     let startCell = null; // Initialize startCell variable
     let endCell = null; // Initialize startCell variable
     let singleClickTimer;
